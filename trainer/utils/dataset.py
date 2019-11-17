@@ -53,18 +53,18 @@ def generate_dataset():
 
     train_horses = train_horses.map(
         preprocess_image_train, num_parallel_calls=AUTOTUNE).cache().shuffle(
-        BUFFER_SIZE).batch(1).prefetch(buffer_size=AUTOTUNE)
+        BUFFER_SIZE).repeat().batch(1).prefetch(buffer_size=AUTOTUNE)
 
     train_zebras = train_zebras.map(
         preprocess_image_train, num_parallel_calls=AUTOTUNE).cache().shuffle(
-        BUFFER_SIZE).batch(1).prefetch(buffer_size=AUTOTUNE)
+        BUFFER_SIZE).batch(1).repeat().prefetch(buffer_size=AUTOTUNE)
 
     test_horses = test_horses.map(
         preprocess_image_test, num_parallel_calls=AUTOTUNE).cache().shuffle(
-        BUFFER_SIZE).batch(1).prefetch(buffer_size=AUTOTUNE)
+        BUFFER_SIZE).batch(1).repeat().prefetch(buffer_size=AUTOTUNE)
 
     test_zebras = test_zebras.map(
         preprocess_image_test, num_parallel_calls=AUTOTUNE).cache().shuffle(
-        BUFFER_SIZE).batch(1).prefetch(buffer_size=AUTOTUNE)
+        BUFFER_SIZE).batch(1).repeat().prefetch(buffer_size=AUTOTUNE)
 
     return train_horses, train_zebras, test_horses, test_zebras
