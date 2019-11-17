@@ -1,5 +1,5 @@
 import tensorflow as tf
-from .MyInstanceNorm import MyInstanceNorm
+from trainer.utils.MyInstanceNorm import MyInstanceNorm
 
 class ReflectionPadding2D(tf.keras.layers.Layer):
     def __init__(self, padding=(1, 1), **kwargs):
@@ -14,7 +14,7 @@ class ReflectionPadding2D(tf.keras.layers.Layer):
     def call(self, x, mask=None):
         w_pad,h_pad = self.padding
         return tf.pad(x, [[0,0], [h_pad,h_pad], [w_pad,w_pad], [0,0] ], 'REFLECT')
-    
+
     def get_config(self):
         config = {
             'padding':
@@ -64,19 +64,19 @@ def upsample_conv(input_tensor, kernel_size, filters, stride):
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
   return x
 
-def create_generator(input_dim=3, output_dim=3):
-    inputs = tf.keras.layers.Input(shape=(256, 256, input_dim))
+def create_generator(shape=(256, 256, 3)):
+    inputs = tf.keras.layers.Input(shape=shape)
     x = conv_w_reflection(inputs, 7, 64, 1)
     x = conv_w_reflection(x, 3, 128, 2)
     x = conv_w_reflection(x, 3, 256, 2)
     x = residual_block(x, 256)
     x = residual_block(x, 256)
     x = residual_block(x, 256)
-    
+
     x = residual_block(x, 256)
     x = residual_block(x, 256)
     x = residual_block(x, 256)
-    
+
     x = residual_block(x, 256)
     x = residual_block(x, 256)
     x = residual_block(x, 256)
@@ -101,8 +101,8 @@ def dis_downsample(input_tensor,
   x = tf.keras.layers.LeakyReLU(alpha=0.2)(x)
   return x
 
-def create_discriminator(input_dim=3, output_dim=3):
-    inputs = tf.keras.layers.Input(shape=(256, 256, input_dim))
+def create_discriminator(shape=(256, 256, 3)):
+    inputs = tf.keras.layers.Input(shape=shape)
     x = dis_downsample(inputs, 4, 64, 2, norm=False)
     x = dis_downsample(x, 4, 128, 2, norm=True)
     x = dis_downsample(x, 4, 256, 2, norm=True)
