@@ -13,10 +13,10 @@ def random_crop(image):
       image, size=[IMG_HEIGHT, IMG_WIDTH, 3])
 
   return cropped_image
-# normalizing the images to [-1, 1]
+# normalizing the images to [0, 1]
 def normalize(image):
   image = tf.cast(image, tf.float32)
-  image = (image / 127.5) - 1
+  image = image / 255.0
   return image
 def random_jitter(image):
   # resizing to 286 x 286 x 3

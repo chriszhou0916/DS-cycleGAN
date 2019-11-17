@@ -85,7 +85,7 @@ def create_generator(shape=(256, 256, 3)):
     x = ReflectionPadding2D(padding=(3, 3))(x)
     x = tf.keras.layers.Conv2D(3, 7, strides=1, activation='tanh')(x)
 #     x = tf.keras.layers.Conv2DTranspose(output_dim, kernel_size=7, strides=1, padding='same', activation='tanh')(x)
-# #     x = tf.keras.layers.Lambda(lambda x: tf.math.scalar_mul(255./2, x) + 255./2)(x)
+    x = tf.keras.layers.Lambda(lambda x: tf.math.scalar_mul(.5, x) + .5)(x)
     return tf.keras.Model(inputs=inputs, outputs=x)
 #     return x
 
