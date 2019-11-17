@@ -1,5 +1,5 @@
 """
-Copyright Ouwen Huang 2019 
+Copyright Ouwen Huang 2019
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,20 +21,20 @@ class MultiReduceLROnPlateau(tf.keras.callbacks.ReduceLROnPlateau):
     def __init__(self, *args, training_models=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.training_models = training_models
-    
+
     def set_new_lr(self, new_lr):
         for model in self.training_models:
             K.set_value(model.optimizer.lr, new_lr)
-    
+
     def get_lr(self):
         return K.get_value(self.training_models[0].optimizer.lr)
-    
+
     def on_epoch_end(self, epoch, logs=None):
         logs = logs or {}
         logs['lr'] = self.get_lr()
         current = logs.get(self.monitor)
         if current is None:
-            logging.warning('Reduce LR on plateau conditioned on metric `%s` '
+            print('Reduce LR on plateau conditioned on metric `%s` '
                                             'which is not available. Available metrics are: %s',
                                             self.monitor, ','.join(list(logs.keys())))
 
