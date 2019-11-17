@@ -40,7 +40,7 @@ def get_config():
     parser.add_argument('--cycle_consistency_loss', default=10, type=int, help='cycle consistency loss weight')
 
     # Cloud ML Params
-    parser.add_argument('--job-dir', default='./trained_models/tmp{}'.format(str(time.time())), help='Job directory for Google Cloud ML')
+    parser.add_argument('--job-dir', default='gs://duke-bme590-cz/mimicknet/tmp/{}'.format(str(time.time())), help='Job directory for Google Cloud ML')
     parser.add_argument('--model_dir', default='./trained_models/models', help='Directory for trained models')
     parser.add_argument('--image_dir', default='./trained_models/images', help='Local image directory')
 

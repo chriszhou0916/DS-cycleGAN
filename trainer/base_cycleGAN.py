@@ -82,7 +82,7 @@ image_gen = callbacks.GenerateImages(g_AB, test_horses, test_zebras, LOG_DIR, in
 
 # Fit the model
 model.fit(train_horses, train_zebras,
-          steps_per_epoch=10,
+          steps_per_epoch=dataset_count,
           epochs=config.epochs,
           validation_data=(test_horses, test_zebras),
           validation_steps=10,
