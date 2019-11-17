@@ -1,5 +1,5 @@
 GCS_BUCKET="gs://duke-bme590-cz/ds-cyclegan/ai_platform/experiments"
-IMAGE_URI=gcr.io/duke-ultrasound/mimicknet:tf2rc0
+IMAGE_URI=gcr.io/my-project-1475521763853/dscycle-gan:tf2
 REGION=us-east1
 
 docker build -f Dockerfile -t $IMAGE_URI .
@@ -14,5 +14,5 @@ gcloud ai-platform jobs submit training $JOB_NAME \
   --region $REGION \
   --job-dir $JOB_DIR \
   -- \
-  --epochs 2
+  --epochs 10
 gcloud ai-platform jobs describe $JOB_NAME

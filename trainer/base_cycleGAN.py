@@ -69,7 +69,8 @@ log_code = callbacks.LogCode(LOG_DIR, './trainer')
 copy_keras = callbacks.CopyKerasModel(MODEL_DIR, LOG_DIR)
 
 saving = callbacks.MultiModelCheckpoint(MODEL_DIR + '/model.{epoch:02d}-{val_ssim:.10f}.hdf5',
-                                        monitor='val_ssim', verbose=1, freq='epoch', mode='max', save_best_only=True,
+                                        monitor='val_ssim', verbose=1, freq='epoch', mode='max', save_best_only=False,
+                                        save_weights_only=True,
                                         multi_models=[('g_AB', g_AB), ('g_BA', g_BA), ('d_A', d_A), ('d_B', d_B)])
 
 reduce_lr = callbacks.MultiReduceLROnPlateau(training_models=[model.d_A, model.d_B, model.combined],

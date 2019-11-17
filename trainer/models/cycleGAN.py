@@ -44,6 +44,8 @@ class CycleGAN:
         self.g_loss = g_loss
         self.loss_weights = loss_weights
 
+        self.d_A.trainable = True
+        self.d_B.trainable = True
         self.d_A.compile(loss=self.d_loss, optimizer=self.optimizer, metrics=['accuracy'])
         self.d_B.compile(loss=self.d_loss, optimizer=self.optimizer, metrics=['accuracy'])
 
