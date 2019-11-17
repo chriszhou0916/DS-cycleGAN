@@ -82,7 +82,9 @@ image_gen = callbacks.GenerateImages(g_AB, test_horses, test_zebras, LOG_DIR, in
 
 # Fit the model
 model.fit(train_horses, train_zebras,
-          steps_per_epoch=5,
+          steps_per_epoch=10,
           epochs=config.epochs,
+          validation_data=(test_horses, test_zebras),
+          validation_steps=10,
           callbacks=[log_code, reduce_lr, tensorboard, prog_bar, image_gen, saving,
                      copy_keras, start_tensorboard])

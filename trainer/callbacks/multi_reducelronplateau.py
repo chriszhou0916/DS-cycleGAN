@@ -34,11 +34,8 @@ class MultiReduceLROnPlateau(tf.keras.callbacks.ReduceLROnPlateau):
         logs['lr'] = self.get_lr()
         current = logs.get(self.monitor)
         if current is None:
-<<<<<<< HEAD
-            print(self.monitor)
-=======
->>>>>>> 37efb46dd16ac09d9e78fc4890e8e4ce17b47322
-            print('Reduce LR on plateau conditioned on metric %s'
+
+            logging.warning('Reduce LR on plateau conditioned on metric %s'
                                             'which is not available. Available metrics are: %s',
                                             self.monitor, ','.join(list(logs.keys())))
 

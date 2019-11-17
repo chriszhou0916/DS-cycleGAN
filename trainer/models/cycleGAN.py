@@ -80,9 +80,10 @@ class CycleGAN:
             metrics_summary[metric.__name__] = []
 
         for step in range(validation_steps):
-            val_batch = next(self.dataset_val_next)
-            B_batch = val_batch[1]
-            fake_B = self.g_AB.predict(val_batch[0])
+            # val_batch = next(self.dataset_val_next)
+            A_batch = next(self.dataset_val_a_next)
+            B_batch = next(self.dataset_val_b_next)
+            fake_B = self.g_AB.predict(A_batch)
 
             for metric in self.metrics:
                 metric_output = metric(tf.constant(B_batch), tf.constant(fake_B)).numpy()
@@ -104,8 +105,9 @@ class CycleGAN:
             metric_names = ['d_loss', 'd_acc', 'g_loss', 'adv_loss', 'recon_loss', 'id_loss', 'lr']
             metric_names.extend([metric.__name__ for metric in self.metrics])
 
-        if not hasattr(self, 'dataset_val_next') and validation_data is not None:
-            self.dataset_val_next = iter(validation_data)
+        if not hasattr(self, 'dataset_val_a_next') and validation_data is not None:
+            self.dataset_val_a_next = iter(validation_data[0])
+            self.dataset_val_b_next = iter(validation_data[1])
             metric_names.extend(['val_' + name for name in metric_names])
 
         for callback in callbacks:
