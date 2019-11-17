@@ -26,8 +26,8 @@ class GenerateImages(tf.keras.callbacks.Callback):
         self.interval = interval
         self.forward = forward
         self.summary_writer = tf.summary.create_file_writer(log_dir)
-        self.datasetA = datasetA
-        self.datasetB = datasetB
+        self.datasetA = iter(datasetA)
+        self.datasetB = iter(datasetB)
 
     def generate_images(self):
         real_A = next(self.datasetA)

@@ -122,7 +122,6 @@ class CycleGAN:
         }
 
     def train_step(self):
-        print('train step')
         a_batch = next(self.dataset_a_next)
         b_batch = next(self.dataset_b_next)
 
