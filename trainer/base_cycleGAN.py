@@ -85,4 +85,4 @@ model.fit(train_horses, train_zebras,
           steps_per_epoch=1050,
           epochs=config.epochs,
           callbacks=[log_code, reduce_lr, tensorboard, prog_bar, image_gen, saving,
-                     copy_keras, start_tensorboard, early_stopping])
+                     copy_keras, start_tensorboard])
