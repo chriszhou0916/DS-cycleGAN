@@ -31,7 +31,7 @@ def random_jitter(image):
 
   return image
 def preprocess_image_train(image, label):
-  image = random_jitter(image)
+  # image = random_jitter(image)
   image = normalize(image)
   return image
 def preprocess_image_test(image, label):
