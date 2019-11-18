@@ -27,19 +27,10 @@ def get_config():
     parser.add_argument('--epochs',   default=40,  type=int, help='number of epochs')
     parser.add_argument('--m',        default=True, type=bool, help='manual run or hp tuning')
     parser.add_argument('--is_test',  default=False, type=bool, help='is test')
-
-    # parser.add_argument('--train_csv', default='gs://duke-research-us/mimicknet/data/training-v2.csv', help='csv for paired training')
-    # parser.add_argument('--train_das_csv', default='gs://duke-research-us/mimicknet/data/training_a-v2.csv', help='csv with das images for training')
-    # parser.add_argument('--train_clinical_csv', default='gs://duke-research-us/mimicknet/data/training_b-v2.csv', help='csv with clinical images for training')
-    # parser.add_argument('--validation_csv', default='gs://duke-research-us/mimicknet/data/validation-v2.csv', help='csv for validation')
-    # parser.add_argument('--test_csv', default='gs://duke-research-us/mimicknet/data/testing-v2.csv', help='csv for testing')
-
-    # Modeling parser
-    # parser.add_argument('--clipping', default=-80.0, type=float, help='DAS dB clipping')
-    # parser.add_argument('--kernel_height', default=3, type=int, help='height of convolution kernel')
     parser.add_argument('--cycle_consistency_loss', default=10, type=int, help='cycle consistency loss weight')
     parser.add_argument('--disc_loss', default=1, type=int, help='discriminators loss weight')
     parser.add_argument('--id_loss', default=1, type=int, help='identity loss weight')
+    parser.add_argument('--buffer_size', default=1000, type=int, help='dataset shuffle buffer size')
 
     # Cloud ML Params
     parser.add_argument('--job-dir', default='gs://duke-bme590-cz/ds-cyclegan/tmp/{}'.format(str(time.time())), help='Job directory for Google Cloud ML')
