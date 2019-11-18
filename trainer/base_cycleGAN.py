@@ -54,9 +54,9 @@ model.compile(optimizer=tf.keras.optimizers.Adam(0.0002, 0.5),
                  'mae', 'mae',
                  'mae', 'mae'
               ], loss_weights = [
-                 1,  1,
+                 config.disc_loss,  config.disc_loss,
                  config.cycle_consistency_loss, config.cycle_consistency_loss,
-                 config.disc_loss,  config.disc_loss
+                 config.id_loss,  config.id_loss
               ],
               metrics=[utils.ssim, utils.psnr, utils.mae, utils.mse])
 
