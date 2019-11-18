@@ -93,7 +93,7 @@ def create_generator(shape=(256, 256, 3)):
 def unet_downsample(input_tensor, filters, size, apply_norm=True):
     initializer = tf.random_normal_initializer(0., 0.02)
     x = tf.keras.layers.Conv2D(filters, size, strides=2, padding='same',
-                                    kernel_initializer=initializer, use_bias=False))(input_tensor)
+                                    kernel_initializer=initializer, use_bias=False)(input_tensor)
     if apply_norm:
         x = normalization(x, method='instance')
     x = tf.keras.layers.Activation(tf.nn.leaky_relu)(x)
@@ -102,7 +102,7 @@ def unet_downsample(input_tensor, filters, size, apply_norm=True):
 def unet_upsample(input_tensor, filters, size, apply_dropout=False, last=False):
     initializer = tf.random_normal_initializer(0., 0.02)
     x = tf.keras.layers.Conv2DTranspose(filters, size, strides=2, padding='same',
-                                    kernel_initializer=initializer, use_bias=False))(input_tensor)
+                                    kernel_initializer=initializer, use_bias=False)(input_tensor)
     x = normalization(x, method='instance')
     if apply_dropout:
         x = tf.keras.layers.Dropout(0.5)(x)
