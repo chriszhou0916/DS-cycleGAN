@@ -143,21 +143,31 @@ def create_unet_generator(shape=(256, 256, 3)):
 def dis_downsample(input_tensor,
                kernel_size,
                filters,
-               stride, norm=True):
-  p = 1
+               stride, norm=None):
+  p = kernel_size // 2
   x = ReflectionPadding2D(padding=(p, p))(input_tensor)
   x = tf.keras.layers.Conv2D(filters, kernel_size, strides=stride)(x)
-  if norm:
-    x = normalization(x, method='instance')
+  if norm is not None:
+    x = normalization(x, method=norm)
   x = tf.keras.layers.LeakyReLU(alpha=0.2)(x)
   return x
 
 def create_discriminator(shape=(256, 256, 3)):
     inputs = tf.keras.layers.Input(shape=shape)
-    x = dis_downsample(inputs, 4, 64, 2, norm=False)
-    x = dis_downsample(x, 4, 128, 2, norm=True)
-    x = dis_downsample(x, 4, 256, 2, norm=True)
-    x = dis_downsample(x, 4, 512, 1, norm=True)
+    x = dis_downsample(inputs, 4, 64, 2, norm=None)
+    x = dis_downsample(x, 4, 128, 2, norm='instance')
+    x = dis_downsample(x, 4, 256, 2, norm='instance')
+    x = dis_downsample(x, 4, 512, 1, norm='instance')
     x = tf.keras.layers.Conv2D(filters=1, kernel_size=4, strides=1, padding='same')(x)
     return tf.keras.Model(inputs=inputs, outputs=x)
+
+def create_LSdiscriminator(shape=(256, 256, 3)):
+    inputs = tf.keras.layers.Input(shape=shape)
+    x = dis_downsample(inputs, 5, 64, 2, norm=None)
+    x = dis_downsample(x, 5, 128, 2, norm='instance')
+    x = dis_downsample(x, 5, 256, 2, norm='instance')
+    x = dis_downsample(x, 5, 512, 2, norm='instance')
+    x = tf.keras.layers.Dense(1, activation='linear')(x)
+    return tf.keras.Model(inputs=inputs, outputs=x)
+
 #     return x
