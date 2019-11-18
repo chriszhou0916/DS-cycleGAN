@@ -38,19 +38,19 @@ def conv_w_reflection(input_tensor,
                stride):
   p = kernel_size // 2
   x = ReflectionPadding2D(padding=(p, p))(input_tensor)
-  x = tf.keras.layers.Conv2D(filters, kernel_size, strides=stride, use_bias=False)(x)
+  x = tf.keras.layers.Conv2D(filters, kernel_size, strides=stride, use_bias=True)(x)
   x = normalization(x, method='instance')
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
   return x
 
 def conv_block(input_tensor, filters):
   x = ReflectionPadding2D(padding=(1, 1))(input_tensor)
-  x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=False)(x)
+  x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=True)(x)
   x = normalization(x, method='instance')
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
 
   x = ReflectionPadding2D(padding=(1, 1))(x)
-  x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=False)(x)
+  x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=True)(x)
   x = normalization(x, method='instance')
   return x
 
@@ -60,7 +60,7 @@ def residual_block(input_tensor, filters):
   return x
 
 def upsample_conv(input_tensor, kernel_size, filters, stride):
-  x = tf.keras.layers.Conv2DTranspose(filters, kernel_size, strides=stride, padding='same', use_bias=False)(input_tensor)
+  x = tf.keras.layers.Conv2DTranspose(filters, kernel_size, strides=stride, padding='same', use_bias=True)(input_tensor)
   x = normalization(x, method='instance')
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
   return x
@@ -93,7 +93,7 @@ def create_generator(shape=(256, 256, 3)):
 def unet_downsample(input_tensor, filters, size, apply_norm=True):
     initializer = tf.random_normal_initializer(0., 0.02)
     x = tf.keras.layers.Conv2D(filters, size, strides=2, padding='same',
-                                    kernel_initializer=initializer, use_bias=False)(input_tensor)
+                                    kernel_initializer=initializer, use_bias=True)(input_tensor)
     if apply_norm:
         x = normalization(x, method='instance')
     x = tf.keras.layers.Activation(tf.nn.leaky_relu)(x)
@@ -102,7 +102,7 @@ def unet_downsample(input_tensor, filters, size, apply_norm=True):
 def unet_upsample(input_tensor, filters, size, apply_dropout=False, last=False):
     initializer = tf.random_normal_initializer(0., 0.02)
     x = tf.keras.layers.Conv2DTranspose(filters, size, strides=2, padding='same',
-                                    kernel_initializer=initializer, use_bias=False)(input_tensor)
+                                    kernel_initializer=initializer, use_bias=True)(input_tensor)
     x = normalization(x, method='instance')
     if apply_dropout:
         x = tf.keras.layers.Dropout(0.5)(x)
