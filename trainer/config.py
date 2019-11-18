@@ -37,9 +37,9 @@ def get_config():
     # Modeling parser
     # parser.add_argument('--clipping', default=-80.0, type=float, help='DAS dB clipping')
     # parser.add_argument('--kernel_height', default=3, type=int, help='height of convolution kernel')
-    parser.add_argument('--cycle_consistency_loss', default=20, type=int, help='cycle consistency loss weight')
-    parser.add_argument('--disc_loss', default=5, type=int, help='discriminators loss weight')
-    parser.add_argument('--id_loss', default=2, type=int, help='identity loss weight')
+    parser.add_argument('--cycle_consistency_loss', default=10, type=int, help='cycle consistency loss weight')
+    parser.add_argument('--disc_loss', default=1, type=int, help='discriminators loss weight')
+    parser.add_argument('--id_loss', default=1, type=int, help='identity loss weight')
 
     # Cloud ML Params
     parser.add_argument('--job-dir', default='gs://duke-bme590-cz/ds-cyclegan/tmp/{}'.format(str(time.time())), help='Job directory for Google Cloud ML')
