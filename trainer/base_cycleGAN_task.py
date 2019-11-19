@@ -31,7 +31,7 @@ MODEL_DIR = config.model_dir
 
 # Load Data (Build your custom data loader and replace below)
 train_horses, train_zebras, test_horses, test_zebras = dataset.generate_dataset()
-dataset_count = 1000
+dataset_count = 1067
 # Select and Compile Model
 g_AB = networks.create_generator(shape=(config.in_h, config.in_w, 3), norm=config.generator_norm)
 
@@ -83,7 +83,8 @@ image_gen = callbacks.GenerateImages(g_AB, test_horses, test_zebras, LOG_DIR, in
 
 # Fit the model
 model.fit(train_horses, train_zebras,
-          steps_per_epoch=dataset_count,
+    batch_size=config.bs,
+    steps_per_epoch=(dataset_count // config.bs),
           epochs=config.epochs,
           validation_data=(test_horses, test_zebras),
           validation_steps=10,
