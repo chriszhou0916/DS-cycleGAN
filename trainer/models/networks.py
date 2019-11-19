@@ -145,7 +145,7 @@ def dis_downsample(input_tensor,
                filters,
                stride, norm=None):
   initializer = tf.random_normal_initializer(0., 0.02)
-  p = kernel_size // 2
+  p = 1
   x = ReflectionPadding2D(padding=(p, p))(input_tensor)
   x = tf.keras.layers.Conv2D(filters, kernel_size, strides=stride, kernel_initializer=initializer)(x)
   if norm is not None:
@@ -160,7 +160,8 @@ def create_discriminator(shape=(256, 256, 3)):
     x = dis_downsample(x, 4, 128, 2, norm='batch')
     x = dis_downsample(x, 4, 256, 2, norm='batch')
     x = dis_downsample(x, 4, 512, 1, norm='batch')
-    x = tf.keras.layers.Conv2D(filters=1, kernel_size=4, strides=1, padding='same', kernel_initializer=initializer)(x)
+    x = ReflectionPadding2D(padding=(1, 1))(x)
+    x = tf.keras.layers.Conv2D(filters=1, kernel_size=4, strides=1, kernel_initializer=initializer)(x)
     return tf.keras.Model(inputs=inputs, outputs=x)
 
 def create_LSdiscriminator(shape=(256, 256, 3)):
@@ -172,4 +173,3 @@ def create_LSdiscriminator(shape=(256, 256, 3)):
     x = tf.keras.layers.Dense(1, activation='linear')(x)
     return tf.keras.Model(inputs=inputs, outputs=x)
 
-#     return x
