@@ -34,11 +34,15 @@ def random_jitter(image):
   return image
 def preprocess_image_train(image, label):
   # image = random_jitter(image)
-  image = tf.image.resize(image, [128, 128],
+  if IMG_HEIGHT != 256:
+      image = tf.image.resize(image, [IMG_WIDTH, IMG_HEIGHT],
                           method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
   image = normalize(image)
   return image
 def preprocess_image_test(image, label):
+  if IMG_HEIGHT != 256:
+      image = tf.image.resize(image, [IMG_WIDTH, IMG_HEIGHT],
+                          method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
   image = normalize(image)
   return image
 def generate_dataset():
