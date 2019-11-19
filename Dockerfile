@@ -1,5 +1,5 @@
 # Install the nightly version of tensorflow
-FROM tensorflow/tensorflow:latest-gpu-py3
+FROM tensorflow/tensorflow:2.0.0rc0-gpu-py3
 WORKDIR /root
 
 RUN pip3 install tensorflow_datasets google-cloud-storage
