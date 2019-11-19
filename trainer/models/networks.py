@@ -75,9 +75,10 @@ def create_generator(shape=(256, 256, 3), norm='instance'):
     x = residual_block(x, 256, norm=norm)
     x = residual_block(x, 256, norm=norm)
 
-    x = residual_block(x, 256, norm=norm)
-    x = residual_block(x, 256, norm=norm)
-    x = residual_block(x, 256, norm=norm)
+    if shape[0] > 255:
+        x = residual_block(x, 256, norm=norm)
+        x = residual_block(x, 256, norm=norm)
+        x = residual_block(x, 256, norm=norm)
 
     x = residual_block(x, 256, norm=norm)
     x = residual_block(x, 256, norm=norm)
