@@ -35,54 +35,55 @@ def normalization(intput_tensor, method='instance'):
 def conv_w_reflection(input_tensor,
                kernel_size,
                filters,
-               stride):
+               stride,
+               norm='instance'):
   p = kernel_size // 2
   x = ReflectionPadding2D(padding=(p, p))(input_tensor)
   x = tf.keras.layers.Conv2D(filters, kernel_size, strides=stride, use_bias=True)(x)
-  x = normalization(x, method='batch')
+  x = normalization(x, method=norm)
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
   return x
 
-def conv_block(input_tensor, filters):
+def conv_block(input_tensor, filters, norm='instance'):
   x = ReflectionPadding2D(padding=(1, 1))(input_tensor)
   x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=True)(x)
-  x = normalization(x, method='batch')
+  x = normalization(x, method=norm)
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
 
   x = ReflectionPadding2D(padding=(1, 1))(x)
   x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=True)(x)
-  x = normalization(x, method='batch')
+  x = normalization(x, method=norm)
   return x
 
-def residual_block(input_tensor, filters):
-  b1 = conv_block(input_tensor, filters)
+def residual_block(input_tensor, filters, norm='instance'):
+  b1 = conv_block(input_tensor, filters, norm=norm)
   x = tf.keras.layers.Add()([input_tensor, b1])
   return x
 
-def upsample_conv(input_tensor, kernel_size, filters, stride):
+def upsample_conv(input_tensor, kernel_size, filters, stride, norm='instance'):
   x = tf.keras.layers.Conv2DTranspose(filters, kernel_size, strides=stride, padding='same', use_bias=True)(input_tensor)
-  x = normalization(x, method='batch')
+  x = normalization(x, method=norm)
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
   return x
 
-def create_generator(shape=(256, 256, 3)):
+def create_generator(shape=(256, 256, 3), norm='instance'):
     inputs = tf.keras.layers.Input(shape=shape)
-    x = conv_w_reflection(inputs, 7, 64, 1)
-    x = conv_w_reflection(x, 3, 128, 2)
-    x = conv_w_reflection(x, 3, 256, 2)
-    x = residual_block(x, 256)
-    x = residual_block(x, 256)
-    x = residual_block(x, 256)
+    x = conv_w_reflection(inputs, 7, 64, 1, norm=norm)
+    x = conv_w_reflection(x, 3, 128, 2, norm=norm)
+    x = conv_w_reflection(x, 3, 256, 2, norm=norm)
+    x = residual_block(x, 256, norm=norm)
+    x = residual_block(x, 256, norm=norm)
+    x = residual_block(x, 256, norm=norm)
 
-    x = residual_block(x, 256)
-    x = residual_block(x, 256)
-    x = residual_block(x, 256)
+    x = residual_block(x, 256, norm=norm)
+    x = residual_block(x, 256, norm=norm)
+    x = residual_block(x, 256, norm=norm)
 
-    x = residual_block(x, 256)
-    x = residual_block(x, 256)
-    x = residual_block(x, 256)
-    x = upsample_conv(x, 3, 128, 2)
-    x = upsample_conv(x, 3, 64, 2)
+    x = residual_block(x, 256, norm=norm)
+    x = residual_block(x, 256, norm=norm)
+    x = residual_block(x, 256, norm=norm)
+    x = upsample_conv(x, 3, 128, 2, norm=norm)
+    x = upsample_conv(x, 3, 64, 2, norm=norm)
     x = ReflectionPadding2D(padding=(3, 3))(x)
     x = tf.keras.layers.Conv2D(3, 7, strides=1, activation='tanh')(x)
 #     x = tf.keras.layers.Conv2DTranspose(output_dim, kernel_size=7, strides=1, padding='same', activation='tanh')(x)
@@ -153,13 +154,13 @@ def dis_downsample(input_tensor,
   x = tf.keras.layers.LeakyReLU(alpha=0.2)(x)
   return x
 
-def create_discriminator(shape=(256, 256, 3)):
+def create_discriminator(shape=(256, 256, 3), norm=None):
     initializer = tf.random_normal_initializer(0., 0.02)
     inputs = tf.keras.layers.Input(shape=shape)
     x = dis_downsample(inputs, 4, 64, 2, norm=None)
-    x = dis_downsample(x, 4, 128, 2, norm='batch')
-    x = dis_downsample(x, 4, 256, 2, norm='batch')
-    x = dis_downsample(x, 4, 512, 1, norm='batch')
+    x = dis_downsample(x, 4, 128, 2, norm=norm)
+    x = dis_downsample(x, 4, 256, 2, norm=norm)
+    x = dis_downsample(x, 4, 512, 1, norm=norm)
     x = ReflectionPadding2D(padding=(1, 1))(x)
     x = tf.keras.layers.Conv2D(filters=1, kernel_size=4, strides=1, kernel_initializer=initializer)(x)
     return tf.keras.Model(inputs=inputs, outputs=x)
@@ -172,4 +173,3 @@ def create_LSdiscriminator(shape=(256, 256, 3)):
     x = dis_downsample(x, 5, 512, 2, norm='instance')
     x = tf.keras.layers.Dense(1, activation='linear')(x)
     return tf.keras.Model(inputs=inputs, outputs=x)
-

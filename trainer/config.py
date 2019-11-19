@@ -31,6 +31,8 @@ def get_config():
     parser.add_argument('--disc_loss', default=1, type=int, help='discriminators loss weight')
     parser.add_argument('--id_loss', default=1, type=int, help='identity loss weight')
     parser.add_argument('--buffer_size', default=1000, type=int, help='dataset shuffle buffer size')
+    parser.add_argument('--generator_norm', default='instance', help='what kind of normalization to use')
+    parser.add_argument('--discriminator_norm', default='instance', help='what kind of normalization to use')
 
     # Cloud ML Params
     parser.add_argument('--job-dir', default='gs://duke-bme590-cz/ds-cyclegan/tmp/{}'.format(str(time.time())), help='Job directory for Google Cloud ML')

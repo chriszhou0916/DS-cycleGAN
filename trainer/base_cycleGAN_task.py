@@ -33,13 +33,13 @@ MODEL_DIR = config.model_dir
 train_horses, train_zebras, test_horses, test_zebras = dataset.generate_dataset()
 dataset_count = 1000
 # Select and Compile Model
-g_AB = networks.create_generator(shape=(config.in_h, config.in_w, 3))
+g_AB = networks.create_generator(shape=(config.in_h, config.in_w, 3), norm=config.generator_norm)
 
-g_BA = networks.create_generator(shape=(config.in_h, config.in_w, 3))
+g_BA = networks.create_generator(shape=(config.in_h, config.in_w, 3), norm=config.generator_norm)
 
-d_A = networks.create_discriminator(shape=(config.in_h, config.in_w, 3))
+d_A = networks.create_discriminator(shape=(config.in_h, config.in_w, 3), norm=config.discriminator_norm)
 
-d_B = networks.create_discriminator(shape=(config.in_h, config.in_w, 3))
+d_B = networks.create_discriminator(shape=(config.in_h, config.in_w, 3), norm=config.discriminator_norm)
 
 model = models.CycleGAN(shape = (None, None, 3),
                         g_AB=g_AB,

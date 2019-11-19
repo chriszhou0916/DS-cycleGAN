@@ -14,5 +14,7 @@ gcloud ai-platform jobs submit training $JOB_NAME \
   --region $REGION \
   --job-dir $JOB_DIR \
   -- \
-  --epochs 10
+  --epochs 10 \
+  --discriminator_norm instance \
+  --generator_norm instance
 gcloud ai-platform jobs describe $JOB_NAME
