@@ -48,9 +48,9 @@ model = models.CycleGAN(shape = (None, None, 3),
                         d_A=d_A)
 loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 model.compile(optimizer=tf.keras.optimizers.Adam(0.0002, 0.5),
-              d_loss=loss_obj,
+              d_loss='mse',
               g_loss = [
-                 loss_obj, loss_obj,
+                 'mse', 'mse',
                  'mae', 'mae',
                  'mae', 'mae'
               ], loss_weights = [
@@ -58,7 +58,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(0.0002, 0.5),
                  config.cycle_consistency_loss, config.cycle_consistency_loss,
                  config.id_loss,  config.id_loss
               ],
-              metrics=[utils.ssim, utils.psnr, utils.mae, utils.mse])
+              metrics=[utils.ssim])
 
 # Generate Callbacks
 tensorboard = tf.keras.callbacks.TensorBoard(log_dir=LOG_DIR, write_graph=True, update_freq='epoch')
@@ -73,8 +73,8 @@ saving = callbacks.MultiModelCheckpoint(MODEL_DIR + '/model.{epoch:02d}-{val_ssi
                                         save_weights_only=True,
                                         multi_models=[('g_AB', g_AB), ('g_BA', g_BA), ('d_A', d_A), ('d_B', d_B)])
 
-reduce_lr = callbacks.MultiReduceLROnPlateau(training_models=[model.d_A, model.d_B, model.combined],
-                                             monitor='val_ssim', mode='max', factor=0.5, patience=3, min_lr=0.000002)
+# reduce_lr = callbacks.MultiReduceLROnPlateau(training_models=[model.d_A, model.d_B, model.combined],
+#                                              monitor='val_ssim', mode='max', factor=0.5, patience=3, min_lr=0.000002)
 # early_stopping = callbacks.MultiEarlyStopping(multi_models=[g_AB, g_BA, d_A, d_B], full_model=model,
 #                                               monitor='val_ssim', mode='max', patience=1,
 #                                               restore_best_weights=True, verbose=1)
@@ -87,5 +87,5 @@ model.fit(train_horses, train_zebras,
           epochs=config.epochs,
           validation_data=(test_horses, test_zebras),
           validation_steps=10,
-          callbacks=[log_code, reduce_lr, tensorboard, prog_bar, image_gen, saving,
+          callbacks=[log_code, tensorboard, prog_bar, image_gen, saving,
                      copy_keras, start_tensorboard])

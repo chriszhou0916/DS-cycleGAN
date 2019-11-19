@@ -32,7 +32,7 @@ class GenerateImages(tf.keras.callbacks.Callback):
     def generate_images(self):
         real_A = next(self.datasetA)
         real_B = next(self.datasetB)
-        fake_B = self.forward.predict(real_A) * 0.5 + 0.5
+        fake_B = self.forward.predict(real_A)
         fake_B = tf.clip_by_value(fake_B, 0, 1).numpy()
 
         with self.summary_writer.as_default():

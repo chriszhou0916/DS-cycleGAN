@@ -34,6 +34,8 @@ def random_jitter(image):
   return image
 def preprocess_image_train(image, label):
   # image = random_jitter(image)
+  image = tf.image.resize(image, [128, 128],
+                          method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
   image = normalize(image)
   return image
 def preprocess_image_test(image, label):
