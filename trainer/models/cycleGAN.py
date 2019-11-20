@@ -46,8 +46,8 @@ class CycleGAN:
 
         self.d_A.trainable = True
         self.d_B.trainable = True
-        self.d_A.compile(loss=self.d_loss, optimizer=self.optimizer, metrics=['accuracy'])
-        self.d_B.compile(loss=self.d_loss, optimizer=self.optimizer, metrics=['accuracy'])
+        self.d_A.compile(loss=self.d_loss, optimizer=self.optimizer, metrics=['accuracy'], loss_weights=[.5])
+        self.d_B.compile(loss=self.d_loss, optimizer=self.optimizer, metrics=['accuracy'], loss_weights=[.5])
 
         # Build the generator block
         self.d_A.trainable = False
@@ -140,11 +140,11 @@ class CycleGAN:
         # Train the discriminators (original images = real / translated = Fake)
         dA_loss_real = self.d_A.train_on_batch(a_batch, self.valid)
         dA_loss_fake = self.d_A.train_on_batch(fake_A, self.fake)
-        dA_loss = 0.5 * np.add(dA_loss_real, dA_loss_fake)
+        dA_loss = np.add(dA_loss_real, dA_loss_fake)
 
         dB_loss_real = self.d_B.train_on_batch(b_batch, self.valid)
         dB_loss_fake = self.d_B.train_on_batch(fake_B, self.fake)
-        dB_loss = 0.5 * np.add(dB_loss_real, dB_loss_fake)
+        dB_loss = np.add(dB_loss_real, dB_loss_fake)
 
         d_loss = 0.5 * np.add(dA_loss, dB_loss)
 
