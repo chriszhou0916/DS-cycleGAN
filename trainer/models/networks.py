@@ -86,7 +86,7 @@ def create_generator(shape=(256, 256, 3), norm='instance', skip=False):
     x = upsample_conv(x, 3, 128, 2, norm=norm)
     x = upsample_conv(x, 3, 64, 2, norm=norm)
     x = ReflectionPadding2D(padding=(3, 3))(x)
-    x = tf.keras.layers.Conv2D(3, 7, strides=1, ac)(x)
+    x = tf.keras.layers.Conv2D(3, 7, strides=1)(x)
     if skip:
         x = tf.keras.layers.Add()([x, inputs])
     x = tf.keras.layers.Activation(tf.nn.tanh)(x)
