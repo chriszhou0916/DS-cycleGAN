@@ -33,9 +33,9 @@ MODEL_DIR = config.model_dir
 train_horses, train_zebras, test_horses, test_zebras = dataset.generate_dataset()
 dataset_count = 1067
 # Select and Compile Model
-g_AB = networks.create_generator(shape=(config.in_h, config.in_w, 3), norm=config.generator_norm)
+g_AB = networks.create_generator(shape=(config.in_h, config.in_w, 3), norm=config.generator_norm, skip=True)
 
-g_BA = networks.create_generator(shape=(config.in_h, config.in_w, 3), norm=config.generator_norm)
+g_BA = networks.create_generator(shape=(config.in_h, config.in_w, 3), norm=config.generator_norm, skip=True)
 
 d_A = networks.create_discriminator(shape=(config.in_h, config.in_w, 3), norm=config.discriminator_norm)
 
