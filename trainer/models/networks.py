@@ -37,21 +37,23 @@ def conv_w_reflection(input_tensor,
                filters,
                stride,
                norm='instance'):
+  initializer = tf.random_normal_initializer(0., 0.02)
   p = kernel_size // 2
   x = ReflectionPadding2D(padding=(p, p))(input_tensor)
-  x = tf.keras.layers.Conv2D(filters, kernel_size, strides=stride, use_bias=True)(x)
+  x = tf.keras.layers.Conv2D(filters, kernel_size, strides=stride, use_bias=True, kernel_initializer=initializer)(x)
   x = normalization(x, method=norm)
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
   return x
 
 def conv_block(input_tensor, filters, norm='instance'):
+  initializer = tf.random_normal_initializer(0., 0.02)
   x = ReflectionPadding2D(padding=(1, 1))(input_tensor)
-  x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=True)(x)
+  x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=True, kernel_initializer=initializer)(x)
   x = normalization(x, method=norm)
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
 
   x = ReflectionPadding2D(padding=(1, 1))(x)
-  x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=True)(x)
+  x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=(1, 1), use_bias=True, kernel_initializer=initializer)(x)
   x = normalization(x, method=norm)
   return x
 
@@ -61,12 +63,14 @@ def residual_block(input_tensor, filters, norm='instance'):
   return x
 
 def upsample_conv(input_tensor, kernel_size, filters, stride, norm='instance'):
-  x = tf.keras.layers.Conv2DTranspose(filters, kernel_size, strides=stride, padding='same', use_bias=True)(input_tensor)
+  initializer = tf.random_normal_initializer(0., 0.02)
+  x = tf.keras.layers.Conv2DTranspose(filters, kernel_size, strides=stride, padding='same', use_bias=True, kernel_initializer=initializer)(input_tensor)
   x = normalization(x, method=norm)
   x = tf.keras.layers.Activation(tf.nn.relu)(x)
   return x
 
 def create_generator(shape=(256, 256, 3), norm='instance', skip=False):
+    initializer = tf.random_normal_initializer(0., 0.02)
     inputs = tf.keras.layers.Input(shape=shape)
     x = conv_w_reflection(inputs, 7, 64, 1, norm=norm)
     x = conv_w_reflection(x, 3, 128, 2, norm=norm)
@@ -86,7 +90,7 @@ def create_generator(shape=(256, 256, 3), norm='instance', skip=False):
     x = upsample_conv(x, 3, 128, 2, norm=norm)
     x = upsample_conv(x, 3, 64, 2, norm=norm)
     x = ReflectionPadding2D(padding=(3, 3))(x)
-    x = tf.keras.layers.Conv2D(3, 7, strides=1)(x)
+    x = tf.keras.layers.Conv2D(3, 7, strides=1, kernel_initializer=initializer)(x)
     if skip:
         x = tf.keras.layers.Add()([x, inputs])
     x = tf.keras.layers.Activation(tf.nn.tanh)(x)
