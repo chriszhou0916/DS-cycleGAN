@@ -154,7 +154,7 @@ class CycleGAN:
                                                a_batch, b_batch])
 
         self.log['d_loss'] = d_loss[0]
-        self.log['d_acc'] = 100*d_loss[1]
+        self.log['d_acc'] = 100*d_loss[1]/2
         self.log['g_loss'] = g_loss[0]
         self.log['adv_loss'] = np.mean(g_loss[1:3])
         self.log['recon_loss'] = np.mean(g_loss[3:5])

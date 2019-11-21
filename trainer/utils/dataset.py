@@ -46,7 +46,7 @@ def preprocess_image_test(image, label):
   image = normalize(image)
   return image
 def generate_dataset():
-    dataset, metadata = tfds.load('cycle_gan/horse2zebra',
+    dataset, metadata = tfds.load('cycle_gan/apple2orange',
                                   with_info=True, as_supervised=True)
 
     train_horses, train_zebras = dataset['trainA'], dataset['trainB']
