@@ -46,7 +46,7 @@ def preprocess_image_test(image, label):
   image = normalize(image)
   return image
 def generate_dataset():
-    dataset, metadata = tfds.load('cycle_gan/apple2orange',
+    dataset, metadata = tfds.load('cycle_gan/monet2photo',
                                   with_info=True, as_supervised=True)
 
     train_horses, train_zebras = dataset['trainA'], dataset['trainB']
@@ -54,18 +54,18 @@ def generate_dataset():
 
     train_horses = train_horses.map(
         preprocess_image_train, num_parallel_calls=AUTOTUNE).shuffle(
-        BUFFER_SIZE).repeat().batch(BATCH_SIZE).prefetch(buffer_size=AUTOTUNE)
+        BUFFER_SIZE).repeat().batch(BATCH_SIZE).prefetch(AUTOTUNE)
 
     train_zebras = train_zebras.map(
         preprocess_image_train, num_parallel_calls=AUTOTUNE).shuffle(
-        BUFFER_SIZE).repeat().batch(BATCH_SIZE).prefetch(buffer_size=AUTOTUNE)
+        BUFFER_SIZE).repeat().batch(BATCH_SIZE).prefetch(AUTOTUNE)
 
     test_horses = test_horses.map(
         preprocess_image_test, num_parallel_calls=AUTOTUNE).shuffle(
-        BUFFER_SIZE).repeat().batch(BATCH_SIZE).prefetch(buffer_size=AUTOTUNE)
+        BUFFER_SIZE).repeat().batch(BATCH_SIZE).prefetch(AUTOTUNE)
 
     test_zebras = test_zebras.map(
         preprocess_image_test, num_parallel_calls=AUTOTUNE).shuffle(
-        BUFFER_SIZE).repeat().batch(BATCH_SIZE).prefetch(buffer_size=AUTOTUNE)
+        BUFFER_SIZE).repeat().batch(BATCH_SIZE).prefetch(AUTOTUNE)
 
     return train_horses, train_zebras, test_horses, test_zebras

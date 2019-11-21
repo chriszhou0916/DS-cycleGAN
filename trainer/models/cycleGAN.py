@@ -125,13 +125,14 @@ class CycleGAN:
             'size': batch_size
         }
 
+    @tf.function
     def train_step(self):
         a_batch = next(self.dataset_a_next)
         b_batch = next(self.dataset_b_next)
 
         self.patch_gan_size = (a_batch.shape[0],) + self.d_A.get_output_shape_at(0)[1:]
-        self.valid = np.ones(self.patch_gan_size)
-        self.fake = np.zeros(self.patch_gan_size)
+        self.valid = tf.ones(self.patch_gan_size)
+        self.fake = tf.zeros(self.patch_gan_size)
 
         # Translate images to opposite domain
         fake_B = self.g_AB.predict(a_batch)
@@ -140,13 +141,13 @@ class CycleGAN:
         # Train the discriminators (original images = real / translated = Fake)
         dA_loss_real = self.d_A.train_on_batch(a_batch, self.valid)
         dA_loss_fake = self.d_A.train_on_batch(fake_A, self.fake)
-        dA_loss = np.add(dA_loss_real, dA_loss_fake)
+        dA_loss = dA_loss_real + dA_loss_fake
 
         dB_loss_real = self.d_B.train_on_batch(b_batch, self.valid)
         dB_loss_fake = self.d_B.train_on_batch(fake_B, self.fake)
-        dB_loss = np.add(dB_loss_real, dB_loss_fake)
+        dB_loss = dB_loss_real + dB_loss_fake
 
-        d_loss = 0.5 * np.add(dA_loss, dB_loss)
+        d_loss = 0.5 * dA_loss + dB_loss
 
         g_loss = self.combined.train_on_batch([a_batch, b_batch],
                                               [self.valid, self.valid,
