@@ -133,7 +133,7 @@ class CycleGAN:
             'id_loss': 0
         }
 
-    @tf.function
+    # @tf.function
     def train_step(self, a_batch, b_batch):
         # a_batch = next(self.dataset_a_next)
         # b_batch = next(self.dataset_b_next)
@@ -162,12 +162,12 @@ class CycleGAN:
                                                a_batch, b_batch,
                                                a_batch, b_batch])
 
-        # self.log['d_loss'] = d_loss[0]
-        # self.log['d_acc'] = 100*d_loss[1]/2
-        # self.log['g_loss'] = g_loss[0]
-        # self.log['adv_loss'] = np.mean(g_loss[1:3])
-        # self.log['recon_loss'] = np.mean(g_loss[3:5])
-        # self.log['id_loss'] = np.mean(g_loss[5:6])
+        self.log['d_loss'] = d_loss
+        self.log['d_acc'] = 100/4*(dA_loss_real[1] + dA_loss_fake[1] + dB_loss_real[1] + dB_loss_fake[1])
+        self.log['g_loss'] = g_loss[0]
+        self.log['adv_loss'] = tf.math.reduce_mean(g_loss[1:3])
+        self.log['recon_loss'] = f.math.reduce_mean(g_loss[3:5])
+        self.log['id_loss'] = f.math.reduce_mean(g_loss[5:6])
 
     def fit(self, dataset_a, dataset_b, batch_size=1, steps_per_epoch=10, epochs=3, validation_data=None, verbose=1, validation_steps=10,
             callbacks=[]):
