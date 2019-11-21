@@ -33,7 +33,8 @@ def get_config():
     parser.add_argument('--buffer_size', default=1000, type=int, help='dataset shuffle buffer size')
     parser.add_argument('--generator_norm', default='instance', help='what kind of normalization to use')
     parser.add_argument('--discriminator_norm', default='instance', help='what kind of normalization to use')
-
+    parser.add_argument('--ds_name', default='horse2zebra', help='what kind of normalization to use')
+    parser.add_argument('--ds_count', default=1067, type=int, help='what kind of normalization to use')
     # Cloud ML Params
     parser.add_argument('--job-dir', default='gs://duke-bme590-cz/ds-cyclegan/tmp/{}'.format(str(time.time())), help='Job directory for Google Cloud ML')
     parser.add_argument('--model_dir', default='./trained_models', help='Directory for trained models')

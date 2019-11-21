@@ -30,8 +30,8 @@ LOG_DIR = config.job_dir
 MODEL_DIR = config.model_dir
 
 # Load Data (Build your custom data loader and replace below)
-train_horses, train_zebras, test_horses, test_zebras = dataset.generate_dataset()
-dataset_count = 1072
+train_horses, train_zebras, test_horses, test_zebras = dataset.generate_dataset(config.ds_name)
+dataset_count = config.ds_count
 # Select and Compile Model
 g_AB = networks.create_generator(shape=(config.in_h, config.in_w, 3), norm=config.generator_norm, skip=False)
 
