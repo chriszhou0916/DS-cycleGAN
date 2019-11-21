@@ -166,8 +166,8 @@ class CycleGAN:
         self.log['d_acc'] = 100/4*(dA_loss_real[1] + dA_loss_fake[1] + dB_loss_real[1] + dB_loss_fake[1])
         self.log['g_loss'] = g_loss[0]
         self.log['adv_loss'] = tf.math.reduce_mean(g_loss[1:3])
-        self.log['recon_loss'] = f.math.reduce_mean(g_loss[3:5])
-        self.log['id_loss'] = f.math.reduce_mean(g_loss[5:6])
+        self.log['recon_loss'] = tf.math.reduce_mean(g_loss[3:5])
+        self.log['id_loss'] = tf.math.reduce_mean(g_loss[5:6])
 
     def fit(self, dataset_a, dataset_b, batch_size=1, steps_per_epoch=10, epochs=3, validation_data=None, verbose=1, validation_steps=10,
             callbacks=[]):
