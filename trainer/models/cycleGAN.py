@@ -124,7 +124,13 @@ class CycleGAN:
             })
 
         self.log = {
-            'size': batch_size
+            'size': batch_size,
+            'd_loss': 0,
+            'd_acc': 0,
+            'g_loss': 0,
+            'adv_loss': 0,
+            'recon_loss': 0,
+            'id_loss': 0
         }
 
     @tf.function
@@ -137,31 +143,31 @@ class CycleGAN:
         self.fake = tf.zeros(self.patch_gan_size)
 
         # Translate images to opposite domain
-        fake_B = self.g_AB.predict(a_batch)
-        fake_A = self.g_BA.predict(b_batch)
+        fake_B = self.g_AB(a_batch)
+        fake_A = self.g_BA(b_batch)
 
         # Train the discriminators (original images = real / translated = Fake)
         dA_loss_real = self.d_A.train_on_batch(a_batch, self.valid)
         dA_loss_fake = self.d_A.train_on_batch(fake_A, self.fake)
-        dA_loss = dA_loss_real + dA_loss_fake
+        dA_loss = dA_loss_real[0] + dA_loss_fake[0]
 
         dB_loss_real = self.d_B.train_on_batch(b_batch, self.valid)
         dB_loss_fake = self.d_B.train_on_batch(fake_B, self.fake)
-        dB_loss = dB_loss_real + dB_loss_fake
+        dB_loss = dB_loss_real[0] + dB_loss_fake[0]
 
-        d_loss = 0.5 * dA_loss + dB_loss
+        d_loss = 0.5 * (dA_loss + dB_loss)
 
         g_loss = self.combined.train_on_batch([a_batch, b_batch],
                                               [self.valid, self.valid,
                                                a_batch, b_batch,
                                                a_batch, b_batch])
 
-        self.log['d_loss'] = d_loss[0]
-        self.log['d_acc'] = 100*d_loss[1]/2
-        self.log['g_loss'] = g_loss[0]
-        self.log['adv_loss'] = np.mean(g_loss[1:3])
-        self.log['recon_loss'] = np.mean(g_loss[3:5])
-        self.log['id_loss'] = np.mean(g_loss[5:6])
+        # self.log['d_loss'] = d_loss[0]
+        # self.log['d_acc'] = 100*d_loss[1]/2
+        # self.log['g_loss'] = g_loss[0]
+        # self.log['adv_loss'] = np.mean(g_loss[1:3])
+        # self.log['recon_loss'] = np.mean(g_loss[3:5])
+        # self.log['id_loss'] = np.mean(g_loss[5:6])
 
     def fit(self, dataset_a, dataset_b, batch_size=1, steps_per_epoch=10, epochs=3, validation_data=None, verbose=1, validation_steps=10,
             callbacks=[]):
