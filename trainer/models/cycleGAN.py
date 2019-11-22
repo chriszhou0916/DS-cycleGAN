@@ -134,7 +134,7 @@ class CycleGAN:
         }
 
     # @tf.function
-    def train_step(self, a_batch, b_batch):
+    def train_step(self):
         a_batch = next(self.dataset_a_next)
         b_batch = next(self.dataset_b_next)
 
