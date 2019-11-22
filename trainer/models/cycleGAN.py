@@ -102,10 +102,10 @@ class CycleGAN:
         self.stop_training = False # Flag for early stopping
 
         if not hasattr(self, 'dataset_next_a'):
-            # self.dataset_a_next = iter(dataset_a)
-            # self.dataset_b_next = iter(dataset_b)
-            self.dataset_a_next = dataset_a
-            self.dataset_b_next = dataset_b
+            self.dataset_a_next = iter(dataset_a)
+            self.dataset_b_next = iter(dataset_b)
+            # self.dataset_a_next = dataset_a
+            # self.dataset_b_next = dataset_b
             metric_names = ['d_loss', 'd_acc', 'g_loss', 'adv_loss', 'recon_loss', 'id_loss', 'lr']
             metric_names.extend([metric.__name__ for metric in self.metrics])
 
@@ -135,8 +135,8 @@ class CycleGAN:
 
     # @tf.function
     def train_step(self, a_batch, b_batch):
-        # a_batch = next(self.dataset_a_next)
-        # b_batch = next(self.dataset_b_next)
+        a_batch = next(self.dataset_a_next)
+        b_batch = next(self.dataset_b_next)
 
         self.patch_gan_size = (a_batch.shape[0],) + self.d_A.get_output_shape_at(0)[1:]
         self.valid = tf.ones(self.patch_gan_size)
@@ -175,16 +175,16 @@ class CycleGAN:
         for callback in callbacks: callback.on_train_begin(logs=self.log)
         for epoch in range(epochs):
             for callback in callbacks: callback.on_epoch_begin(epoch, logs=self.log)
-            # for step in range(steps_per_epoch):
-            #     for callback in callbacks: callback.on_batch_begin(step, logs=self.log)
-            #     self.train_step()
-            #     for callback in callbacks: callback.on_batch_end(step, logs=self.log)
-            step = 0
-            for image_x, image_y in tf.data.Dataset.zip((self.dataset_a_next, self.dataset_b_next)):
+            for step in range(steps_per_epoch):
                 for callback in callbacks: callback.on_batch_begin(step, logs=self.log)
-                self.train_step(image_x, image_y)
+                self.train_step()
                 for callback in callbacks: callback.on_batch_end(step, logs=self.log)
-                step += 1
+            # step = 0
+            # for image_x, image_y in tf.data.Dataset.zip((self.dataset_a_next, self.dataset_b_next)):
+            #     for callback in callbacks: callback.on_batch_begin(step, logs=self.log)
+            #     self.train_step(image_x, image_y)
+            #     for callback in callbacks: callback.on_batch_end(step, logs=self.log)
+            #     step += 1
             if validation_data is not None:
                 forward_metrics = self.validate(validation_steps)
 
