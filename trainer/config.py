@@ -29,7 +29,7 @@ def get_config():
     parser.add_argument('--is_test',  default=False, type=bool, help='is test')
     parser.add_argument('--cycle_consistency_loss', default=10, type=int, help='cycle consistency loss weight')
     parser.add_argument('--disc_loss', default=1, type=int, help='discriminators loss weight')
-    parser.add_argument('--id_loss', default=1, type=int, help='identity loss weight')
+    parser.add_argument('--id_loss', default=5, type=int, help='identity loss weight')
     parser.add_argument('--buffer_size', default=1000, type=int, help='dataset shuffle buffer size')
     parser.add_argument('--generator_norm', default='instance', help='what kind of normalization to use')
     parser.add_argument('--discriminator_norm', default='instance', help='what kind of normalization to use')
