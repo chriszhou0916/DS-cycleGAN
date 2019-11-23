@@ -34,7 +34,7 @@ class MultiLRScheduler(tf.keras.callbacks.LearningRateScheduler):
         if not isinstance(lr, (float, np.float32, np.float64)):
           raise ValueError('The output of the "schedule" function '
                            'should be float.')
-        set_new_lr(lr)
+        self.set_new_lr(lr)
         if self.verbose > 0:
           print('\nEpoch %05d: LearningRateScheduler reducing learning '
                 'rate to %s.' % (epoch + 1, lr))
