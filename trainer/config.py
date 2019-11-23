@@ -33,6 +33,8 @@ def get_config():
     parser.add_argument('--buffer_size', default=1000, type=int, help='dataset shuffle buffer size')
     parser.add_argument('--generator_norm', default='instance', help='what kind of normalization to use')
     parser.add_argument('--discriminator_norm', default='instance', help='what kind of normalization to use')
+    parser.add_argument('--startLRdecay', default=100, type=int, help='When to start linearly decaying LR')
+
     parser.add_argument('--ds_name', default='horse2zebra', help='what kind of normalization to use')
     parser.add_argument('--ds_count', default=1067, type=int, help='what kind of normalization to use')
     # Cloud ML Params

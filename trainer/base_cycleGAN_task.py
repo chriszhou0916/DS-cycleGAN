@@ -59,7 +59,15 @@ model.compile(optimizer=tf.keras.optimizers.Adam(0.0002, 0.5),
                  config.id_loss,  config.id_loss
               ],
               metrics=[utils.ssim])
+def scheduler(epoch):
+  if epoch < config.startLRdecay:
+    return 2e-4
+  else:
+      epochs_passed = epoch - config.startLRdecay
+      decay_step = 2e-4 / (config.epochs - config.startLRdecay)
+    return 2e-4 - epochs_remaining * decay_step
 
+LRscheduler = tf.keras.callbacks.LearningRateScheduler(scheduler)
 # Generate Callbacks
 tensorboard = tf.keras.callbacks.TensorBoard(log_dir=LOG_DIR, write_graph=True, update_freq='epoch')
 start_tensorboard = callbacks.StartTensorBoard(LOG_DIR)
@@ -89,4 +97,4 @@ model.fit(train_horses, train_zebras,
           validation_data=(test_horses, test_zebras),
           validation_steps=10,
           callbacks=[log_code, tensorboard, prog_bar, image_gen, saving,
-                     copy_keras, start_tensorboard])
+                     copy_keras, start_tensorboard, LRscheduler])
