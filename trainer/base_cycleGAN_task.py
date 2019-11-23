@@ -63,11 +63,11 @@ def scheduler(epoch):
   if epoch < config.startLRdecay:
     return 2e-4
   else:
-      epochs_passed = epoch - config.startLRdecay
-      decay_step = 2e-4 / (config.epochs - config.startLRdecay)
+    epochs_passed = epoch - config.startLRdecay
+    decay_step = 2e-4 / (config.epochs - config.startLRdecay)
     return 2e-4 - epochs_remaining * decay_step
 
-LRscheduler = tf.keras.callbacks.LearningRateScheduler(scheduler)
+LRscheduler = callbacks.MultiLRScheduler(scheduler, training_models=[model.d_A, model.d_B, model.combined])
 # Generate Callbacks
 tensorboard = tf.keras.callbacks.TensorBoard(log_dir=LOG_DIR, write_graph=True, update_freq='epoch')
 start_tensorboard = callbacks.StartTensorBoard(LOG_DIR)
