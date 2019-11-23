@@ -16,6 +16,7 @@ limitations under the License.
 
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
+import numpy as np
 
 class MultiLRScheduler(tf.keras.callbacks.LearningRateScheduler):
     def __init__(self, *args, training_models=None, **kwargs):
