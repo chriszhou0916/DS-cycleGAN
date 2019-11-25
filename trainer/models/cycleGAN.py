@@ -101,7 +101,7 @@ class CycleGAN:
         """Initialize Callbacks and Datasets"""
         self.stop_training = False # Flag for early stopping
 
-        if not hasattr(self, 'dataset_next_a'):
+        if not hasattr(self, 'dataset_a_next'):
             self.dataset_a_next = iter(dataset_a)
             self.dataset_b_next = iter(dataset_b)
             # self.dataset_a_next = dataset_a
