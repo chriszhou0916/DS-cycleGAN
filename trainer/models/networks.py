@@ -203,7 +203,7 @@ def bicycle_generator(img_shape=(256, 256, 3), z_shape=8, norm='instance'):
     initializer = tf.random_normal_initializer(0., 0.02)
 
     img_size = img_shape[0]
-    z = tf.reshape(z, [1, 1, 8])
+    z = tf.reshape(z_shape, [1, 1, 8])
     z = tf.tile(z, [img_size, img_size, 1])
     input_shape = tf.concat([img_shape, z], axis = 2)
 

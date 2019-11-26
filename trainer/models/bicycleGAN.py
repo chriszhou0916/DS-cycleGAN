@@ -45,11 +45,16 @@ def compile(self, optimizer=tf.keras.optimizers.Adam(0.0002, 0.5), metrics=[]):
     z_reconstr_mu, z_reconstr_log_sigma, z_reconstr = self.e(fake_B)
 
     # discriminate
-    discrim_B = self.d(image_b)
-    discrim_fake_B = self.d(fake_b)
+    discrim_B = self.d(img_B)
+    discrim_fake_B = self.d(fake_B)
     discrim_fake_B_encoded = self.d(fake_B_encoded)
 
     # is this the right way to do the losses?
     self.combined = tf.keras.Model(inputs = [img_A, img_B],
                                    outputs = [discrim_B, discrim_fake_B, discrim_fake_B_encoded,
                                               fake_B_encoded, z_encoded, z_encoded_mu, z_encoded_log_sigma])
+    # loss_vae_gan: discrim_B vs discrim_fake_B_encoded     MSE
+    # loss_gan: discrim_B vs discrim_fake_B                 MSE
+    # loss_image_cycle: img_B vs fake_B_encoded             MAE
+    # loss_latent_cycle: z vs z_reconstr                    MAE
+    # loss_kl: z_encoded_log_sigma and z_encoded_mu         KL loss formula
