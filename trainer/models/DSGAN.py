@@ -113,7 +113,7 @@ class DSGAN:
             self.dataset_b_next = iter(dataset_b)
             # self.dataset_a_next = dataset_a
             # self.dataset_b_next = dataset_b
-            metric_names = ['d_loss', 'd_acc', 'g_loss', 'adv_loss', 'recon_loss', 'id_loss', 'lr', 'z_diff']
+            metric_names = ['d_loss', 'd_acc', 'g_loss', 'adv_loss', 'recon_loss', 'id_loss', 'lr', 'ds_loss']
             metric_names.extend([metric.__name__ for metric in self.metrics])
 
         if not hasattr(self, 'dataset_val_a_next') and validation_data is not None:
@@ -138,7 +138,7 @@ class DSGAN:
             'adv_loss': 0,
             'recon_loss': 0,
             'id_loss': 0,
-            'z_diff': 0
+            'ds_loss': 0
         }
     # EDIT
     def mae(self, x, y): return tf.reshape(tf.math.reduce_mean(tf.math.abs((x - y))), [-1])
@@ -189,8 +189,8 @@ class DSGAN:
         self.log['g_loss'] = g_loss[0]
         self.log['adv_loss'] = tf.math.reduce_mean(g_loss[1:3])
         self.log['recon_loss'] = tf.math.reduce_mean(g_loss[3:5])
-        self.log['id_loss'] = tf.math.reduce_mean(g_loss[5:6])
-        self.log['z_diff'] = self.mae(self.z1, self.z2)
+        self.log['id_loss'] = tf.math.reduce_mean(g_loss[5:7])
+        self.log['ds_loss'] = tf.math.reduce_mean(g_loss[7:])
 
     def fit(self, dataset_a, dataset_b, batch_size=1, steps_per_epoch=10, epochs=3, validation_data=None, verbose=1, validation_steps=10,
             callbacks=[]):

@@ -38,7 +38,7 @@ g_BA = networks.bicycle_generator(img_shape=(config.in_h, config.in_w, 3), z_sha
 d_A = networks.create_discriminator(shape=(config.in_h, config.in_w, 3), norm=config.discriminator_norm)
 d_B = networks.create_discriminator(shape=(config.in_h, config.in_w, 3), norm=config.discriminator_norm)
 
-model = models.CycleGAN(shape = (None, None, 3),
+model = models.DSGAN(shape = (None, None, 3),
                         g_AB=g_AB,
                         g_BA=g_BA,
                         d_B=d_B,
