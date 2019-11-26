@@ -199,7 +199,7 @@ def bicycle_encoder_convnet(shape=(256, 256, 3), norm='instance'):
     z = mu + tf.random.normal(shape=(8,))*tf.exp(log_sigma)
     return tf.keras.Model(inputs=inputs, outputs=[mu, log_simga, z])
 
-def bicycle_generator(img_shape=(256, 256, 3), z_shape=(8,), norm='instance', z_in='first'):
+def bicycle_generator(img_shape=(256, 256, 3), z_shape=(8,), norm='instance', skip='false', z_in='first'):
     initializer = tf.random_normal_initializer(0., 0.02)
 
     img_input = tf.keras.layers.Input(shape=img_shape)
@@ -207,9 +207,9 @@ def bicycle_generator(img_shape=(256, 256, 3), z_shape=(8,), norm='instance', z_
 
     if z_in == 'first':
         img_size = img_shape[0]
-        z_input = tf.reshape(z_input, [1, 1, 8])
-        z_input = tf.tile(z_input, [img_size, img_size, 1])
-        inputs = tf.concat([img_input, z_input], axis = 2)
+        z_rv = tf.keras.layers.RepeatVector(img_size*img_size)(z_input)
+        z_rs = tf.keras.layers.Reshape([img_size, img_size, 8])(z_rv)
+        inputs = tf.keras.layers.Concatenate()([img_input, z_rs])
 
     x = conv_w_reflection(inputs, 7, 64, 1, norm=norm)
     x = conv_w_reflection(x, 3, 128, 2, norm=norm)
@@ -234,7 +234,8 @@ def bicycle_generator(img_shape=(256, 256, 3), z_shape=(8,), norm='instance', z_
         x = tf.keras.layers.Add()([x, inputs])
     x = tf.keras.layers.Activation(tf.nn.tanh)(x)
     x = tf.keras.layers.Lambda(lambda x: tf.math.scalar_mul(.5, x) + .5)(x)
-    return tf.keras.Model(inputs=inputs, outputs=x)
+
+    return tf.keras.Model(inputs=[img_input, z_input], outputs=x)
 
 def bicycle_discriminator(shape=(256, 256, 3), norm=None):
     initializer = tf.random_normal_initializer(0., 0.02)
