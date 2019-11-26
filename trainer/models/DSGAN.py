@@ -160,6 +160,8 @@ class DSGAN:
         self.fake = tf.zeros(self.patch_gan_size)
 
         # Translate images to opposite domain
+        print(a_batch)
+        print(self.z1)
         fake_B = self.g_AB([a_batch, self.z1])
         fake_A = self.g_BA([b_batch, self.z1])
 
