@@ -92,7 +92,7 @@ class DSGAN:
             # val_batch = next(self.dataset_val_next)
             A_batch = next(self.dataset_val_a_next)
             B_batch = next(self.dataset_val_b_next)
-            fake_B = self.g_AB.predict(A_batch)
+            fake_B = self.g_AB.predict([A_batch, self.z1])
 
             for metric in self.metrics:
                 metric_output = metric(tf.constant(B_batch), tf.constant(fake_B)).numpy()
