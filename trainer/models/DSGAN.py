@@ -152,16 +152,16 @@ class DSGAN:
         a_batch = next(self.dataset_a_next)
         b_batch = next(self.dataset_b_next)
 
-        self.z1 = tf.random.normal(self.z_shape)
-        self.z2 = tf.random.normal(self.z_shape)
+        self.z1 = tf.random.normal((1, self.z_shape[0]))
+        self.z2 = tf.random.normal((1, self.z_shape[0]))
 
         self.patch_gan_size = (a_batch.shape[0],) + self.d_A.get_output_shape_at(0)[1:]
         self.valid = tf.ones(self.patch_gan_size)
         self.fake = tf.zeros(self.patch_gan_size)
 
         # Translate images to opposite domain
-        print(a_batch)
-        print(self.z1)
+        print(a_batch.shape)
+        print(self.z1.shape)
         fake_B = self.g_AB([a_batch, self.z1])
         fake_A = self.g_BA([b_batch, self.z1])
 
