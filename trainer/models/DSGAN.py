@@ -17,7 +17,7 @@ limitations under the License.
 import tensorflow as tf
 import numpy as np
 
-class CycleGAN:
+class DSGAN:
     def __init__(self, g_AB=None, g_BA=None, d_B=None, d_A=None, shape = (None, None, 3), z_shape=(8,)):
         self.shape = shape
         self.z_shape = z_shape
@@ -138,9 +138,9 @@ class CycleGAN:
             'id_loss': 0
         }
     # EDIT
-    def mae(x, y): return tf.reshape(tf.math.reduce_mean(tf.math.abs((x - y))), [-1])
+    def mae(self, x, y): return tf.reshape(tf.math.reduce_mean(tf.math.abs((x - y))), [-1])
 
-    def ds_loss(fake_z1, fake_z2):
+    def ds_loss(self, fake_z1, fake_z2):
         img_diff = self.mae(fake_z1, fake_z2)
         z_diff = self.mae(self.z1, self.z2)
         return -img_diff / (z_diff + 1e-5)
