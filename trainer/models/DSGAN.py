@@ -40,6 +40,8 @@ class DSGAN:
                      1,  1,
                      1,  1
                 ]):
+        self.z1 = tf.random.normal(self.z_shape)
+        self.z2 = tf.random.normal(self.z_shape)
         self.optimizer = optimizer
         self.metrics = metrics
         self.d_loss = d_loss
