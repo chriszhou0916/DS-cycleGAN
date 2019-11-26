@@ -181,7 +181,6 @@ def create_LSdiscriminator(shape=(256, 256, 3)):
     x = tf.keras.layers.Dense(1, activation='linear')(x)
     return tf.keras.Model(inputs=inputs, outputs=x)
 
-
 def bicycle_encoder_convnet(shape=(256, 256, 3), norm='instance'):
     initializer = tf.random_normal_initializer(0., 0.02)
     inputs = tf.keras.layers.Input(shape=shape)
@@ -197,7 +196,8 @@ def bicycle_encoder_convnet(shape=(256, 256, 3), norm='instance'):
     x = tf.keras.layers.Flatten()(down7)
     mu = tf.keras.layers.Dense(8)(x)
     log_sigma = tf.keras.layers.Dense(8)(x)
-    z = tf.random.normal(shape=(8,), mean=mu, stddev=log_sigma)
+    z = mu + tf.random.normal(shape=(8,))*tf.exp(log_sigma)
+    return tf.keras.Model(inputs=inputs, outputs=[mu, log_simga, z])
 
 def bicycle_generator(img_shape=(256, 256, 3), z_shape=8, norm='instance'):
     initializer = tf.random_normal_initializer(0., 0.02)
