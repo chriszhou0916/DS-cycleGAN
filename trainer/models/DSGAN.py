@@ -113,7 +113,7 @@ class DSGAN:
             self.dataset_b_next = iter(dataset_b)
             # self.dataset_a_next = dataset_a
             # self.dataset_b_next = dataset_b
-            metric_names = ['d_loss', 'd_acc', 'g_loss', 'adv_loss', 'recon_loss', 'id_loss', 'lr']
+            metric_names = ['d_loss', 'd_acc', 'g_loss', 'adv_loss', 'recon_loss', 'id_loss', 'lr', 'z_diff']
             metric_names.extend([metric.__name__ for metric in self.metrics])
 
         if not hasattr(self, 'dataset_val_a_next') and validation_data is not None:
@@ -137,7 +137,8 @@ class DSGAN:
             'g_loss': 0,
             'adv_loss': 0,
             'recon_loss': 0,
-            'id_loss': 0
+            'id_loss': 0,
+            'z_diff': 0
         }
     # EDIT
     def mae(self, x, y): return tf.reshape(tf.math.reduce_mean(tf.math.abs((x - y))), [-1])
@@ -160,8 +161,6 @@ class DSGAN:
         self.fake = tf.zeros(self.patch_gan_size)
 
         # Translate images to opposite domain
-        print(a_batch.shape)
-        print(self.z1.shape)
         fake_B = self.g_AB([a_batch, self.z1])
         fake_A = self.g_BA([b_batch, self.z1])
 
