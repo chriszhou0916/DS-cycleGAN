@@ -217,12 +217,15 @@ def bicycle_generator(img_shape=(256, 256, 3), z_shape=(8,), norm='instance', sk
         z_rv = tf.keras.layers.RepeatVector(new_dim*new_dim)(z_input)
         z_rs = tf.keras.layers.Reshape([new_dim, new_dim, z_shape[0]])(z_rv)
         x = tf.keras.layers.Concatenate()([x, z_rs])
-    x = conv_w_reflection(x, 3, 256, 2, norm=norm)
+    
     if z_in == 'all':
+        x = conv_w_reflection(x, 3, 256-z_shape[0], 2, norm=norm)
         new_dim = int(new_dim / 2)
         z_rv = tf.keras.layers.RepeatVector(new_dim*new_dim)(z_input)
         z_rs = tf.keras.layers.Reshape([new_dim, new_dim, z_shape[0]])(z_rv)
         x = tf.keras.layers.Concatenate()([x, z_rs])
+    else:
+        x = conv_w_reflection(x, 3, 256, 2, norm=norm)
     x = residual_block(x, 256, norm=norm)
     x = residual_block(x, 256, norm=norm)
     x = residual_block(x, 256, norm=norm)
