@@ -29,7 +29,7 @@ class DSGAN:
         self.g_AB = g_AB
         self.g_BA = g_BA
 
-    def compile(self, optimizer=tf.keras.optimizers.Adam(0.0002, 0.5), metrics=[], d_loss='mse',
+    def compile(self, lr_g=2e-4, lr_d=2e-5, metrics=[], d_loss='mse',
                 g_loss = [
                     'mse', 'mse',
                     'mae', 'mae',
@@ -42,7 +42,8 @@ class DSGAN:
                 ]):
         self.z1 = tf.random.normal(self.z_shape)
         self.z2 = tf.random.normal(self.z_shape)
-        self.optimizer = optimizer
+        self.g_optimizer = tf.keras.optimizers.Adam(lr_g, .5)
+        self.d_optimizer = tf.keras.optimizers.Adam(lr_d, .5)
         self.metrics = metrics
         self.d_loss = d_loss
         self.g_loss = g_loss + [self.ds_loss, self.ds_loss] # append ds_loss onto generator loss
@@ -50,8 +51,8 @@ class DSGAN:
 
         self.d_A.trainable = True
         self.d_B.trainable = True
-        self.d_A.compile(loss=self.d_loss, optimizer=self.optimizer, metrics=['accuracy'], loss_weights=[.5])
-        self.d_B.compile(loss=self.d_loss, optimizer=self.optimizer, metrics=['accuracy'], loss_weights=[.5])
+        self.d_A.compile(loss=self.d_loss, optimizer=self.d_optimizer, metrics=['accuracy'], loss_weights=[.1])
+        self.d_B.compile(loss=self.d_loss, optimizer=self.d_optimizer, metrics=['accuracy'], loss_weights=[.1])
 
         # Build the generator block
         self.d_A.trainable = False
@@ -80,7 +81,7 @@ class DSGAN:
                                                   # EDIT
         self.combined.compile(loss=self.g_loss,
                               loss_weights=self.loss_weights,
-                              optimizer=self.optimizer)
+                              optimizer=self.g_optimizer)
 
 
     def validate(self, validation_steps):

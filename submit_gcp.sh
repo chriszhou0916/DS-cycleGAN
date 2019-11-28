@@ -6,7 +6,7 @@ docker build -f Dockerfile -t $IMAGE_URI .
 docker push $IMAGE_URI
 
 JOB_NAME=DScyclegan_baseGAN$(date +%Y_%m_%d_%H%M%S)
-JOB_NAME=monet2photo_5idloss_noskip$(date +%Y_%m_%d_%H%M%S)
+JOB_NAME=zebra_ds4_zall_epoch24$(date +%Y_%m_%d_%H%M%S)
 JOB_DIR=$GCS_BUCKET"/"$JOB_NAME
 gcloud ai-platform jobs submit training $JOB_NAME \
   --master-image-uri $IMAGE_URI \
@@ -21,6 +21,7 @@ gcloud ai-platform jobs submit training $JOB_NAME \
   --epochs 100 \
   --disc_loss 1 \
   --id_loss 5 \
+  --ds_loss 4 \
   --discriminator_norm instance \
   --generator_norm instance
 gcloud ai-platform jobs describe $JOB_NAME

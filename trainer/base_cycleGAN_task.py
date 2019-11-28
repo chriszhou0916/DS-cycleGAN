@@ -46,7 +46,6 @@ model = models.CycleGAN(shape = (None, None, 3),
                         g_BA=g_BA,
                         d_B=d_B,
                         d_A=d_A)
-loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 model.compile(optimizer=tf.keras.optimizers.Adam(0.0002, 0.5),
               d_loss='mse',
               g_loss = [
