@@ -205,15 +205,24 @@ def bicycle_generator(img_shape=(256, 256, 3), z_shape=(8,), norm='instance', sk
     img_input = tf.keras.layers.Input(shape=img_shape)
     z_input = tf.keras.layers.Input(shape=z_shape)
 
-    if z_in == 'first':
-        img_size = img_shape[0]
-        z_rv = tf.keras.layers.RepeatVector(img_size*img_size)(z_input)
-        z_rs = tf.keras.layers.Reshape([img_size, img_size, 8])(z_rv)
-        inputs = tf.keras.layers.Concatenate()([img_input, z_rs])
+    img_size = img_shape[0]
+    z_rv = tf.keras.layers.RepeatVector(img_size*img_size)(z_input)
+    z_rs = tf.keras.layers.Reshape([img_size, img_size, z_shape[0]])(z_rv)
+    inputs = tf.keras.layers.Concatenate()([img_input, z_rs])
 
     x = conv_w_reflection(inputs, 7, 64, 1, norm=norm)
     x = conv_w_reflection(x, 3, 128, 2, norm=norm)
+    if z_in = 'all':
+        new_dim = img_size / 2
+        z_rv = tf.keras.layers.RepeatVector(new_dim*new_dim)(z_input)
+        z_rs = tf.keras.layers.Reshape([new_dim, new_dim, z_shape[0]])(z_rv)
+        x = tf.keras.layers.Concatenate()([x, z_rs])
     x = conv_w_reflection(x, 3, 256, 2, norm=norm)
+    if z_in = 'all':
+        new_dim = new_dim / 2
+        z_rv = tf.keras.layers.RepeatVector(new_dim*new_dim)(z_input)
+        z_rs = tf.keras.layers.Reshape([new_dim, new_dim, z_shape[0]])(z_rv)
+        x = tf.keras.layers.Concatenate()([x, z_rs])
     x = residual_block(x, 256, norm=norm)
     x = residual_block(x, 256, norm=norm)
     x = residual_block(x, 256, norm=norm)
@@ -231,7 +240,7 @@ def bicycle_generator(img_shape=(256, 256, 3), z_shape=(8,), norm='instance', sk
     x = ReflectionPadding2D(padding=(3, 3))(x)
     x = tf.keras.layers.Conv2D(3, 7, strides=1, kernel_initializer=initializer)(x)
     if skip:
-        x = tf.keras.layers.Add()([x, inputs])
+        x = tf.keras.layers.Add()([x, img_input])
     x = tf.keras.layers.Activation(tf.nn.tanh)(x)
     x = tf.keras.layers.Lambda(lambda x: tf.math.scalar_mul(.5, x) + .5)(x)
 
