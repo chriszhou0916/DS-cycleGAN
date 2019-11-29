@@ -33,18 +33,20 @@ MODEL_DIR = config.model_dir
 train_horses, train_zebras, test_horses, test_zebras = dataset.generate_dataset(config.ds_name)
 dataset_count = config.ds_count
 # Select and Compile Model
-g_AB = networks.bicycle_generator(img_shape=(config.in_h, config.in_w, 3), z_shape=(config.latent_z_dim,), norm=config.generator_norm, skip=False)
-g_BA = networks.bicycle_generator(img_shape=(config.in_h, config.in_w, 3), z_shape=(config.latent_z_dim,), norm=config.generator_norm, skip=False)
+g_AB = networks.bicycle_generator(img_shape=(config.in_h, config.in_w, 3), z_shape=(config.latent_z_dim,), norm=config.generator_norm, skip=False, z_in='all')
+g_BA = networks.bicycle_generator(img_shape=(config.in_h, config.in_w, 3), z_shape=(config.latent_z_dim,), norm=config.generator_norm, skip=False, z_in='all')
 d_A = networks.create_discriminator(shape=(config.in_h, config.in_w, 3), norm=config.discriminator_norm)
 d_B = networks.create_discriminator(shape=(config.in_h, config.in_w, 3), norm=config.discriminator_norm)
 
+# Load existing models
+
+# Compile model
 model = models.DSGAN(shape = (None, None, 3),
                         g_AB=g_AB,
                         g_BA=g_BA,
                         d_B=d_B,
                         d_A=d_A)
-loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
-model.compile(optimizer=tf.keras.optimizers.Adam(0.0002, 0.5),
+model.compile(lr_g=2e-4, lr_d=8e-5,
               d_loss='mse',
               g_loss = [
                  'mse', 'mse',
@@ -95,4 +97,4 @@ model.fit(train_horses, train_zebras,
           validation_data=(test_horses, test_zebras),
           validation_steps=10,
           callbacks=[log_code, tensorboard, prog_bar, image_gen, saving,
-                     copy_keras, start_tensorboard, LRscheduler])
+                     copy_keras, start_tensorboard])

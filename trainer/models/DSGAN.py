@@ -145,7 +145,9 @@ class DSGAN:
     def mae(self, x, y): return tf.reshape(tf.math.reduce_mean(tf.math.abs((x - y))), [-1])
 
     def ds_loss(self, fake_z1, fake_z2):
-        img_diff = self.mae(fake_z1, fake_z2)
+        fake_z1_mean = tf.math.reduce_mean(fake_z1)
+        fake_z2_mean = tf.math.reduce_mean(fake_z2)
+        img_diff = self.mae(fake_z1 - fake_z1_mean, fake_z2 - fake_z2_mean)
         z_diff = self.mae(self.z1, self.z2)
         return -img_diff / (z_diff + 1e-5)
 
