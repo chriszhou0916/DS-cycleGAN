@@ -30,7 +30,7 @@ LOG_DIR = config.job_dir
 MODEL_DIR = config.model_dir
 
 # Load Data (Build your custom data loader and replace below)
-train_horses, train_zebras, test_horses, test_zebras = dataset.generate_dataset(config.ds_name)
+train_X, train_Y, test_X, test_Y = dataset.generate_dataset(config.ds_name)
 dataset_count = config.ds_count
 # Select and Compile Model
 g_AB = networks.create_generator(shape=(config.in_h, config.in_w, 3), norm=config.generator_norm, skip=False)
@@ -81,14 +81,14 @@ saving = callbacks.MultiModelCheckpoint(MODEL_DIR + '/model.{epoch:02d}-{val_ssi
                                         multi_models=[('g_AB', g_AB), ('g_BA', g_BA), ('d_A', d_A), ('d_B', d_B)])
                                             restore_best_weights=True, verbose=1)
 
-image_gen = callbacks.GenerateImages(g_AB, test_horses, test_zebras, LOG_DIR, interval=int(dataset_count/config.bs))
+image_gen = callbacks.GenerateImages(g_AB, test_X, test_Y, LOG_DIR, interval=int(dataset_count/config.bs))
 
 # Fit the model
-model.fit(train_horses, train_zebras,
+model.fit(train_X, train_Y,
     batch_size=config.bs,
     steps_per_epoch=(dataset_count // config.bs),
           epochs=config.epochs,
-          validation_data=(test_horses, test_zebras),
+          validation_data=(test_X, test_Y),
           validation_steps=10,
           callbacks=[log_code, tensorboard, prog_bar, image_gen, saving,
                      copy_keras, start_tensorboard, LRscheduler])
