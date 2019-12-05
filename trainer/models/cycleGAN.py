@@ -1,5 +1,5 @@
 """
-Copyright Ouwen Huang 2019
+Copyright Chris Zhou, Leo Hu, Ouwen Huang 2019
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -104,8 +104,6 @@ class CycleGAN:
         if not hasattr(self, 'dataset_a_next'):
             self.dataset_a_next = iter(dataset_a)
             self.dataset_b_next = iter(dataset_b)
-            # self.dataset_a_next = dataset_a
-            # self.dataset_b_next = dataset_b
             metric_names = ['d_loss', 'd_acc', 'g_loss', 'adv_loss', 'recon_loss', 'id_loss', 'lr']
             metric_names.extend([metric.__name__ for metric in self.metrics])
 
@@ -179,12 +177,6 @@ class CycleGAN:
                 for callback in callbacks: callback.on_batch_begin(step, logs=self.log)
                 self.train_step()
                 for callback in callbacks: callback.on_batch_end(step, logs=self.log)
-            # step = 0
-            # for image_x, image_y in tf.data.Dataset.zip((self.dataset_a_next, self.dataset_b_next)):
-            #     for callback in callbacks: callback.on_batch_begin(step, logs=self.log)
-            #     self.train_step(image_x, image_y)
-            #     for callback in callbacks: callback.on_batch_end(step, logs=self.log)
-            #     step += 1
             if validation_data is not None:
                 forward_metrics = self.validate(validation_steps)
 

@@ -1,5 +1,5 @@
 """
-Copyright Ouwen Huang 2019
+Copyright Chris Zhou, Leo Hu, Ouwen Huang 2019
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -80,12 +80,6 @@ saving = callbacks.MultiModelCheckpoint(MODEL_DIR + '/model.{epoch:02d}-{val_ssi
                                         monitor='val_ssim', verbose=1, freq='epoch', mode='max', save_best_only=False,
                                         save_weights_only=True,
                                         multi_models=[('g_AB', g_AB), ('g_BA', g_BA), ('d_A', d_A), ('d_B', d_B)])
-
-# reduce_lr = callbacks.MultiReduceLROnPlateau(training_models=[model.d_A, model.d_B, model.combined],
-#                                              monitor='val_ssim', mode='max', factor=0.5, patience=3, min_lr=0.000002)
-# early_stopping = callbacks.MultiEarlyStopping(multi_models=[g_AB, g_BA, d_A, d_B], full_model=model,
-#                                               monitor='val_ssim', mode='max', patience=1,
-#                                               restore_best_weights=True, verbose=1)
 
 image_gen = callbacks.GenerateImages(g_AB, test_horses, test_zebras, LOG_DIR, interval=int(dataset_count/config.bs), z_shape=(config.latent_z_dim,))
 

@@ -1,5 +1,5 @@
 """
-Copyright Ouwen Huang 2019
+Copyright Chris Zhou, Leo Hu, Ouwen Huang 2019
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ class DSGAN:
         self.g_AB = g_AB
         self.g_BA = g_BA
 
-    def compile(self, lr_g=2e-4, lr_d=2e-5, metrics=[], d_loss='mse',
+    def compile(self, lr_g=2e-4, lr_d=2e-4, metrics=[], d_loss='mse',
                 g_loss = [
                     'mse', 'mse',
                     'mae', 'mae',
@@ -78,7 +78,6 @@ class DSGAN:
                                                   reconstr_A, reconstr_B,
                                                   img_A_id, img_B_id,
                                                   fake_A, fake_B])
-                                                  # EDIT
         self.combined.compile(loss=self.g_loss,
                               loss_weights=self.loss_weights,
                               optimizer=self.optimizer)
@@ -112,8 +111,6 @@ class DSGAN:
         if not hasattr(self, 'dataset_a_next'):
             self.dataset_a_next = iter(dataset_a)
             self.dataset_b_next = iter(dataset_b)
-            # self.dataset_a_next = dataset_a
-            # self.dataset_b_next = dataset_b
             metric_names = ['d_loss', 'd_acc', 'g_loss', 'adv_loss', 'recon_loss', 'id_loss', 'lr', 'ds_loss']
             metric_names.extend([metric.__name__ for metric in self.metrics])
 
@@ -151,7 +148,6 @@ class DSGAN:
         z_diff = self.mae(self.z1, self.z2)
         return -img_diff / (z_diff + 1e-5)
 
-    # @tf.function
     def train_step(self):
         a_batch = next(self.dataset_a_next)
         b_batch = next(self.dataset_b_next)
@@ -205,12 +201,6 @@ class DSGAN:
                 for callback in callbacks: callback.on_batch_begin(step, logs=self.log)
                 self.train_step()
                 for callback in callbacks: callback.on_batch_end(step, logs=self.log)
-            # step = 0
-            # for image_x, image_y in tf.data.Dataset.zip((self.dataset_a_next, self.dataset_b_next)):
-            #     for callback in callbacks: callback.on_batch_begin(step, logs=self.log)
-            #     self.train_step(image_x, image_y)
-            #     for callback in callbacks: callback.on_batch_end(step, logs=self.log)
-            #     step += 1
             if validation_data is not None:
                 forward_metrics = self.validate(validation_steps)
 
