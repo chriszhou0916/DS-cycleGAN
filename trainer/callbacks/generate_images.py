@@ -19,7 +19,7 @@ import argparse
 import numpy as np
 
 class GenerateImages(tf.keras.callbacks.Callback):
-    def __init__(self, forward, datasetA, datasetB, log_dir, interval=1000, postfix='val'):
+    def __init__(self, forward, datasetA, datasetB, log_dir, interval=1000, postfix='val', z_shape=(8,)):
         super()
         self.step_count = 0
         self.postfix = postfix
@@ -28,11 +28,13 @@ class GenerateImages(tf.keras.callbacks.Callback):
         self.summary_writer = tf.summary.create_file_writer(log_dir)
         self.datasetA = iter(datasetA)
         self.datasetB = iter(datasetB)
+        self.z_shape = z_shape
 
     def generate_images(self):
         real_A = next(self.datasetA)
         real_B = next(self.datasetB)
-        fake_B = self.forward.predict(real_A)
+        z1 = tf.random.normal((1, self.z_shape[0]))
+        fake_B = self.forward.predict([real_A, z1])
         fake_B = tf.clip_by_value(fake_B, 0, 1).numpy()
 
         with self.summary_writer.as_default():

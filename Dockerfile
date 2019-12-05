@@ -9,4 +9,4 @@ COPY trainer ./trainer
 RUN mkdir trained_models
 
 # Set up the entry point to invoke the trainer.
-ENTRYPOINT ["python3", "-m", "trainer.base_cycleGAN_task"]
+ENTRYPOINT ["python3", "-m", "trainer.DScycleGAN_task"]
