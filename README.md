@@ -1,14 +1,17 @@
 # DS-CycleGAN
-### Diversity Sensitive Unpaired Image-to-Image Translation
+## Diversity Sensitive Unpaired Image-to-Image Translation
 By Chris Zhou and Leo Hu
 
-This code implements style transfer from the papers **[Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks](https://arxiv.org/abs/1703.10593)** and **[Diversity-Sensitive Conditional Generative Adversarial Networks](https://arxiv.org/abs/1901.09024)** using Tensorflow 2.0 and Keras.
+This code implements multimodal unpaired image-to-image translation from the papers
+- **[Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks](https://arxiv.org/abs/1703.10593)**
+- **[Diversity-Sensitive Conditional Generative Adversarial Networks](https://arxiv.org/abs/1901.09024)**
+using Tensorflow 2.0 and Keras.
 
 ### Quick start
 In this repository we provide three notebook files to perform the following:
 - Transform an image using our pre-trained models in `Transform.ipynb`
 - Train a new model using database(s) of choice `Train.ipynb`
-- Examine possible medical applications of diverse unpaired image-to-image translation using malaria cells `Ultrasound.ipynb`
+- Examine possible medical applications of diverse unpaired image-to-image translation using malaria cells `Malaria.ipynb`
 
 ### Example outputs
 
