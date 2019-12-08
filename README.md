@@ -5,6 +5,7 @@ By Chris Zhou and Leo Hu
 This code implements multimodal unpaired image-to-image translation from the papers
 - **[Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks](https://arxiv.org/abs/1703.10593)**
 - **[Diversity-Sensitive Conditional Generative Adversarial Networks](https://arxiv.org/abs/1901.09024)**
+<!-- I hate markdown -->
 using Tensorflow 2.0 and Keras.
 
 ### Quick start
