@@ -65,7 +65,7 @@ def scheduler(epoch):
   else:
     epochs_passed = epoch - config.startLRdecay
     decay_step = 2e-4 / (config.epochs - config.startLRdecay)
-    return 2e-4 - epochs_remaining * decay_step
+    return 2e-4 - epochs_passed * decay_step
 
 LRscheduler = callbacks.MultiLRScheduler(scheduler, training_models=[model.d_A, model.d_B, model.combined])
 # Generate Callbacks
@@ -91,4 +91,4 @@ model.fit(train_X, train_Y,
           validation_data=(test_X, test_Y),
           validation_steps=10,
           callbacks=[log_code, tensorboard, prog_bar, image_gen, saving,
-                     copy_keras, start_tensorboard])
+                     copy_keras, start_tensorboard, LRscheduler])

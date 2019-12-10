@@ -64,7 +64,7 @@ def scheduler(epoch):
   else:
     epochs_passed = epoch - config.startLRdecay
     decay_step = 2e-4 / (config.epochs - config.startLRdecay)
-    return 2e-4 - epochs_remaining * decay_step
+    return 2e-4 - epochs_passed * decay_step
 
 LRscheduler = callbacks.MultiLRScheduler(scheduler, training_models=[model.d_A, model.d_B, model.combined])
 # Generate Callbacks
