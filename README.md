@@ -16,11 +16,11 @@ DSGAN uses a latent vector input alongside a regularizer to generate multimodal 
 
 DS-CycleGAN is able to generate diverse outputs using cycle-consistent adversarial networks in unpaired image-to-image translation.
 
-![table](imgs/Screen Shot 2019-12-09 at 6.02.43 PM.png)
+![table](imgs/table.png)
 
 One slide illustration of DS-CycleGAN
 
-![illustration](imgs/Screen Shot 2019-12-09 at 7.53.00 PM.png)
+![illustration](imgs/illustration.png)
 
 ### Quick start
 In this repository we provide three notebook files to perform the following:
@@ -28,8 +28,13 @@ In this repository we provide three notebook files to perform the following:
 - Train a new model using database(s) of choice `Train.ipynb`
 - Examine possible medical applications of diverse unpaired image-to-image translation using malaria cells `Malaria.ipynb`
 
-### Example outputs
-![horse_zebra](imgs/Screen Shot 2019-12-09 at 7.55.41 PM.png)
+### Example outputs of CycleGAN
+![horse_zebra](imgs/horsezebra.png)
+![vangoghmonet](imgs/vangoghmonet.png)
+
+### Example outputs of DS-CycleGAN
+![facades](imgs/facades.png)
+
 
 
 
