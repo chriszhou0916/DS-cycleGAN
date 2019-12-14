@@ -9,6 +9,17 @@ By Chris Zhou and Leo Hu
 
 3. We apply DS-CycleGAN to a data augmentation task in medical imaging by converting healthy red blood cells <-> malaria infected red blood cells.
 
+
+### Quick start
+In this repository we provide three notebook files to perform the following:
+- Transform an image using our pre-trained models in `Transform.ipynb`. Both cycleGAN and DS-CycleGAN models are provided
+- Train a new model using database(s) of choice `Train.ipynb`
+- Examine possible medical applications of diverse unpaired image-to-image translation using malaria cells `Malaria.ipynb`
+
+### Colab Notebooks
+[Transform](https://drive.google.com/file/d/1X8TbLc624WJaM-FbGbRBuW-bGkCAyMrg/view?usp=sharing)
+[Train](https://drive.google.com/file/d/1DS1j4QVpCAKwjUuEUQr9dmXugGdM7gz8/view?usp=sharing)
+
 ### Motivation
 CycleGAN is able to generate quality image-to-image outputs from an unpaired dataset, but is limited to a single output image given a single input image.
 
@@ -22,11 +33,6 @@ One slide illustration of DS-CycleGAN
 
 ![illustration](imgs/illustration.png)
 
-### Quick start
-In this repository we provide three notebook files to perform the following:
-- Transform an image using our pre-trained models in `Transform.ipynb`. Both cycleGAN and DS-CycleGAN models are provided
-- Train a new model using database(s) of choice `Train.ipynb`
-- Examine possible medical applications of diverse unpaired image-to-image translation using malaria cells `Malaria.ipynb`
 
 ### Example outputs of CycleGAN
 ![horse_zebra](imgs/horsezebra.png)
