@@ -56,8 +56,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(0.0002, 0.5),
                  config.disc_loss,  config.disc_loss,
                  config.cycle_consistency_loss, config.cycle_consistency_loss,
                  config.id_loss,  config.id_loss
-              ],
-              metrics=[utils.ssim])
+              ])
 def scheduler(epoch):
   if epoch < config.startLRdecay:
     return 2e-4
@@ -75,8 +74,8 @@ prog_bar = tf.keras.callbacks.ProgbarLogger(count_mode='steps', stateful_metrics
 log_code = callbacks.LogCode(LOG_DIR, './trainer')
 copy_keras = callbacks.CopyKerasModel(MODEL_DIR, LOG_DIR)
 
-saving = callbacks.MultiModelCheckpoint(MODEL_DIR + '/model.{epoch:02d}-{val_ssim:.10f}.hdf5',
-                                        monitor='val_ssim', verbose=1, freq='epoch', mode='max', save_best_only=False,
+saving = callbacks.MultiModelCheckpoint(MODEL_DIR + '/model.{epoch:02d}-{accuracy:.10f}.hdf5',
+                                        monitor='accuracy', verbose=1, freq='epoch', mode='max', save_best_only=False,
                                         save_weights_only=True,
                                         multi_models=[('g_AB', g_AB), ('g_BA', g_BA), ('d_A', d_A), ('d_B', d_B)])
                                             restore_best_weights=True, verbose=1)
